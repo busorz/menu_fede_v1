@@ -67,40 +67,41 @@
     <div id="menu"></div>
   </main>
   <script>
-    const lunes = [
-      { comida: 'Desayuno', plato: 'Tostadas integrales con aguacate y tomate', ingredientes: 'Pan integral 60g, aguacate 50g, tomate 50g', kcal: 350, prot: 8, grasas: 15, carbos: 40 },
-      { comida: 'Almuerzo', plato: 'Yogur natural con frutos rojos y nueces', ingredientes: 'Yogur 125g, frutos rojos 50g, nueces 15g', kcal: 250, prot: 12, grasas: 12, carbos: 20 },
-      { comida: 'Comida (Body pump)', plato: 'Pechuga de pollo con quinoa y brócoli', ingredientes: 'Pollo 150g, quinoa 80g, brócoli 100g, AOVE 5g', kcal: 600, prot: 50, grasas: 18, carbos: 45 },
-      { comida: 'Cena', plato: 'Salmón con patata y calabacín (igual que tú)', ingredientes: 'Salmón 150g, patata 150g, calabacín 150g, AOVE 5g', kcal: 600, prot: 40, grasas: 30, carbos: 25 }
-    ];
-
-    const martes = [
-      { comida: 'Desayuno', plato: 'Avena con leche y plátano', ingredientes: 'Avena 50g, leche 150ml, plátano 80g', kcal: 350, prot: 12, grasas: 8, carbos: 50 },
-      { comida: 'Almuerzo', plato: 'Batido de proteína con almendras', ingredientes: 'Proteína 30g, almendras 20g, agua', kcal: 280, prot: 30, grasas: 15, carbos: 5 },
-      { comida: 'Comida (Body pump)', plato: 'Lentejas con verduras y pavo', ingredientes: 'Lentejas 100g, pavo 120g, verduras 100g, AOVE 5g', kcal: 600, prot: 45, grasas: 18, carbos: 55 },
-      { comida: 'Cena', plato: 'Pechuga de pavo con arroz y espinacas (igual que tú)', ingredientes: 'Pavo 150g, arroz 80g, espinacas 100g, AOVE 5g', kcal: 600, prot: 45, grasas: 18, carbos: 35 }
-    ];
-
-    const miercoles = [
-      { comida: 'Desayuno', plato: 'Tortilla con espinacas y tomate', ingredientes: 'Huevos 2, espinacas 50g, tomate 50g', kcal: 320, prot: 25, grasas: 20, carbos: 10 },
-      { comida: 'Almuerzo', plato: 'Queso fresco con nueces y pera', ingredientes: 'Queso fresco 125g, nueces 15g, pera 100g', kcal: 280, prot: 18, grasas: 15, carbos: 20 },
-      { comida: 'Comida (Body pump)', plato: 'Merluza con patata y judías verdes', ingredientes: 'Merluza 150g, patata 150g, judías verdes 100g, AOVE 5g', kcal: 600, prot: 45, grasas: 18, carbos: 40 },
-      { comida: 'Cena', plato: 'Salmón con patata y calabacín (igual que tú)', ingredientes: 'Salmón 150g, patata 150g, calabacín 150g, AOVE 5g', kcal: 600, prot: 40, grasas: 30, carbos: 25 }
-    ];
-
-    const jueves = [
-      { comida: 'Desayuno', plato: 'Porridge de avena con frutos secos', ingredientes: 'Avena 50g, frutos secos 20g, leche 150ml', kcal: 400, prot: 15, grasas: 18, carbos: 45 },
-      { comida: 'Almuerzo', plato: 'Batido de proteína con plátano', ingredientes: 'Proteína 30g, plátano 100g, agua', kcal: 280, prot: 30, grasas: 2, carbos: 25 },
-      { comida: 'Comida (Pilates)', plato: 'Ensalada de garbanzos con atún y verduras', ingredientes: 'Garbanzos 100g, atún 80g, verdura 100g, AOVE 5g', kcal: 600, prot: 45, grasas: 18, carbos: 40 },
-      { comida: 'Cena', plato: 'Pechuga de pavo con arroz y espinacas (igual que tú)', ingredientes: 'Pavo 150g, arroz 80g, espinacas 100g, AOVE 5g', kcal: 600, prot: 45, grasas: 18, carbos: 35 }
-    ];
-
-    const viernes = [
-      { comida: 'Desayuno', plato: 'Yogur natural con granola y frutos rojos', ingredientes: 'Yogur 150g, granola 40g, frutos rojos 50g', kcal: 350, prot: 15, grasas: 10, carbos: 45 },
-      { comida: 'Almuerzo', plato: 'Huevos revueltos con champiñones y pan integral', ingredientes: 'Huevos 2, champiñones 50g, pan integral 40g', kcal: 350, prot: 25, grasas: 20, carbos: 25 },
-      { comida: 'Comida (Body pump)', plato: 'Ternera con batata y brócoli', ingredientes: 'Ternera 150g, batata 150g, brócoli 100g, AOVE 5g', kcal: 650, prot: 50, grasas: 20, carbos: 40 },
-      { comida: 'Cena', plato: 'Salmón con patata y calabacín (igual que tú)', ingredientes: 'Salmón 150g, patata 150g, calabacín 150g, AOVE 5g', kcal: 600, prot: 40, grasas: 30, carbos: 25 }
-    ];
-
-    const sabado = [
-      { comida: 'Desayuno', plato: 'Tostadas con mantequilla de cacahuete y plátano', ingredientes: 'Pan integral 60g, mantequilla de cacahuete 20g, pl
+    const menus = {
+      lunes: [
+        { comida: 'Desayuno', plato: 'Tostadas integrales con aguacate y tomate', ingredientes: 'Pan integral 60g, aguacate 50g, tomate 50g', kcal: 350, prot: 8, grasas: 15, carbos: 40 },
+        { comida: 'Almuerzo', plato: 'Yogur natural con frutos rojos y nueces', ingredientes: 'Yogur 125g, frutos rojos 50g, nueces 15g', kcal: 250, prot: 12, grasas: 12, carbos: 20 },
+        { comida: 'Comida (Body pump)', plato: 'Pechuga de pollo con quinoa y brócoli', ingredientes: 'Pollo 150g, quinoa 80g, brócoli 100g, AOVE 5g', kcal: 600, prot: 50, grasas: 18, carbos: 45 },
+        { comida: 'Cena', plato: 'Salmón con patata y calabacín (igual que tú)', ingredientes: 'Salmón 150g, patata 150g, calabacín 150g, AOVE 5g', kcal: 600, prot: 40, grasas: 30, carbos: 25 }
+      ],
+      martes: [
+        { comida: 'Desayuno', plato: 'Avena con leche y plátano', ingredientes: 'Avena 50g, leche 150ml, plátano 80g', kcal: 350, prot: 12, grasas: 8, carbos: 50 },
+        { comida: 'Almuerzo', plato: 'Batido de proteína con almendras', ingredientes: 'Proteína 30g, almendras 20g, agua', kcal: 280, prot: 30, grasas: 15, carbos: 5 },
+        { comida: 'Comida (Body pump)', plato: 'Lentejas con verduras y pavo', ingredientes: 'Lentejas 100g, pavo 120g, verduras 100g, AOVE 5g', kcal: 600, prot: 45, grasas: 18, carbos: 55 },
+        { comida: 'Cena', plato: 'Pechuga de pavo con arroz y espinacas (igual que tú)', ingredientes: 'Pavo 150g, arroz 80g, espinacas 100g, AOVE 5g', kcal: 600, prot: 45, grasas: 18, carbos: 35 }
+      ],
+      miercoles: [
+        { comida: 'Desayuno', plato: 'Tortilla con espinacas y tomate', ingredientes: 'Huevos 2, espinacas 50g, tomate 50g', kcal: 320, prot: 25, grasas: 20, carbos: 10 },
+        { comida: 'Almuerzo', plato: 'Queso fresco con nueces y pera', ingredientes: 'Queso fresco 125g, nueces 15g, pera 100g', kcal: 280, prot: 18, grasas: 15, carbos: 20 },
+        { comida: 'Comida (Body pump)', plato: 'Merluza con patata y judías verdes', ingredientes: 'Merluza 150g, patata 150g, judías verdes 100g, AOVE 5g', kcal: 600, prot: 45, grasas: 18, carbos: 40 },
+        { comida: 'Cena', plato: 'Salmón con patata y calabacín (igual que tú)', ingredientes: 'Salmón 150g, patata 150g, calabacín 150g, AOVE 5g', kcal: 600, prot: 40, grasas: 30, carbos: 25 }
+      ],
+      jueves: [
+        { comida: 'Desayuno', plato: 'Porridge de avena con frutos secos', ingredientes: 'Avena 50g, frutos secos 20g, leche 150ml', kcal: 400, prot: 15, grasas: 18, carbos: 45 },
+        { comida: 'Almuerzo', plato: 'Batido de proteína con plátano', ingredientes: 'Proteína 30g, plátano 100g, agua', kcal: 280, prot: 30, grasas: 2, carbos: 25 },
+        { comida: 'Comida (Pilates)', plato: 'Ensalada de garbanzos con atún y verduras', ingredientes: 'Garbanzos 100g, atún 80g, verdura 100g, AOVE 5g', kcal: 600, prot: 45, grasas: 18, carbos: 40 },
+        { comida: 'Cena', plato: 'Pechuga de pavo con arroz y espinacas (igual que tú)', ingredientes: 'Pavo 150g, arroz 80g, espinacas 100g, AOVE 5g', kcal: 600, prot: 45, grasas: 18, carbos: 35 }
+      ],
+      viernes: [
+        { comida: 'Desayuno', plato: 'Yogur natural con granola y frutos rojos', ingredientes: 'Yogur 150g, granola 40g, frutos rojos 50g', kcal: 350, prot: 15, grasas: 10, carbos: 45 },
+        { comida: 'Almuerzo', plato: 'Huevos revueltos con champiñones y pan integral', ingredientes: 'Huevos 2, champiñones 50g, pan integral 40g', kcal: 350, prot: 25, grasas: 20, carbos: 25 },
+        { comida: 'Comida (Body pump)', plato: 'Ternera con batata y brócoli', ingredientes: 'Ternera 150g, batata 150g, brócoli 100g, AOVE 5g', kcal: 650, prot: 50, grasas: 20, carbos: 40 },
+        { comida: 'Cena', plato: 'Salmón con patata y calabacín (igual que tú)', ingredientes: 'Salmón 150g, patata 150g, calabacín 150g, AOVE 5g', kcal: 600, prot: 40, grasas: 30, carbos: 25 }
+      ],
+      sabado: [
+        { comida: 'Desayuno', plato: 'Tostadas con mantequilla de cacahuete y plátano', ingredientes: 'Pan integral 60g, mantequilla de cacahuete 20g, plátano 80g', kcal: 400, prot: 12, grasas: 18, carbos: 50 },
+        { comida: 'Almuerzo', plato: 'Batido de proteína con avena', ingredientes: 'Proteína 30g, avena 40g, leche 150ml', kcal: 300, prot: 30, grasas: 8, carbos: 35 },
+        { comida: 'Comida (Pilates)', plato: 'Pollo con arroz y verduras', ingredientes: 'Pollo 150g, arroz 80g, verduras 100g, AOVE 5g', kcal: 600, prot: 45, grasas: 18, carbos: 40 },
+        { comida: 'Cena', plato: 'Salmón con patata y calabacín (igual que tú)', ingredientes: 'Salmón 150g, patata 150g, calabacín 150g, AOVE 5g', kcal: 600, prot: 40, grasas: 30, carbos: 25
+::contentReference[oaicite:1]{index=1}
+ 
