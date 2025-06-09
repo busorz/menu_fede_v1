@@ -2,61 +2,59 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Menú Semanal - Pareja</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Menú semanal pareja</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      margin: 0; padding: 0;
-      background-color: #f5f5f5;
-      color: #333;
+      margin: 0;
+      padding: 0;
+      background-color: #f9f9f9;
     }
     header {
-      background-color: #0066cc;
+      background-color: #2c3e50;
       color: white;
-      padding: 1rem;
       text-align: center;
+      padding: 1rem;
     }
     main {
-      padding: 1rem;
       max-width: 800px;
-      margin: auto;
+      margin: 2rem auto;
+      padding: 1rem;
     }
-    .selector {
+    .day-selector {
       text-align: center;
-      margin-bottom: 1.5rem;
+      margin-bottom: 1rem;
     }
-    .selector select {
-      padding: 0.5rem;
+    select {
       font-size: 1rem;
+      padding: 0.5rem;
     }
     .meal {
       background-color: white;
       padding: 1rem;
       margin-bottom: 1rem;
       border-radius: 8px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      box-shadow: 0 0 8px rgba(0,0,0,0.1);
     }
-    .meal h3 {
-      margin-top: 0;
-    }
-    .totals {
-      background-color: #e0f7fa;
+    .summary {
+      background-color: #eaf2f8;
       padding: 1rem;
       border-radius: 8px;
       text-align: center;
+      font-weight: bold;
     }
   </style>
 </head>
 <body>
   <header>
-    <h1>Menú semanal - Pareja</h1>
-    <p>Objetivo: perder grasa y ganar músculo (1700 kcal/día)</p>
+    <h1>Menú semanal</h1>
+    <p>Objetivo: pérdida de grasa y ganancia muscular</p>
   </header>
   <main>
-    <div class="selector">
-      <label for="daySelect">Selecciona un día:</label>
-      <select id="daySelect" onchange="showDay()">
+    <div class="day-selector">
+      <label for="day">Selecciona un día: </label>
+      <select id="day" onchange="renderMenu()">
         <option value="lunes">Lunes</option>
         <option value="martes">Martes</option>
         <option value="miercoles">Miércoles</option>
@@ -66,80 +64,43 @@
         <option value="domingo">Domingo</option>
       </select>
     </div>
-    <div id="menuContent"></div>
+    <div id="menu"></div>
   </main>
-
   <script>
-    const data = {
-      lunes: [
-        {
-          titulo: "Desayuno",
-          plato: "Tostadas con aguacate y huevo",
-          ingredientes: "Pan integral 60g, aguacate 50g, huevo 1 (60g)",
-          kcal: 330, prot: 15, grasas: 16, carbos: 30
-        },
-        {
-          titulo: "Comida",
-          plato: "Lentejas con arroz y verduras",
-          ingredientes: "Lentejas 70g, arroz 40g, verduras 100g, AOVE 5g",
-          kcal: 520, prot: 25, grasas: 14, carbos: 60
-        },
-        {
-          titulo: "Merienda",
-          plato: "Yogur con nueces y fruta",
-          ingredientes: "Yogur 125g, nueces 15g, fruta 100g",
-          kcal: 280, prot: 10, grasas: 15, carbos: 25
-        },
-        {
-          titulo: "Cena",
-          plato: "Salmón con calabacín y patata",
-          ingredientes: "Salmón 120g, calabacín 150g, patata 120g, AOVE 5g",
-          kcal: 570, prot: 40, grasas: 30, carbos: 35
-        }
-      ],
-      // Puedes duplicar el contenido de lunes para los demás días o ajustarlo
-      martes: [], miercoles: [], jueves: [], viernes: [], sabado: [], domingo: []
-    };
+    const lunes = [
+      { comida: 'Desayuno', plato: 'Tostadas integrales con aguacate y tomate', ingredientes: 'Pan integral 60g, aguacate 50g, tomate 50g', kcal: 350, prot: 8, grasas: 15, carbos: 40 },
+      { comida: 'Almuerzo', plato: 'Yogur natural con frutos rojos y nueces', ingredientes: 'Yogur 125g, frutos rojos 50g, nueces 15g', kcal: 250, prot: 12, grasas: 12, carbos: 20 },
+      { comida: 'Comida (Body pump)', plato: 'Pechuga de pollo con quinoa y brócoli', ingredientes: 'Pollo 150g, quinoa 80g, brócoli 100g, AOVE 5g', kcal: 600, prot: 50, grasas: 18, carbos: 45 },
+      { comida: 'Cena', plato: 'Salmón con patata y calabacín (igual que tú)', ingredientes: 'Salmón 150g, patata 150g, calabacín 150g, AOVE 5g', kcal: 600, prot: 40, grasas: 30, carbos: 25 }
+    ];
 
-    function showDay() {
-      const selected = document.getElementById("daySelect").value;
-      const content = document.getElementById("menuContent");
-      content.innerHTML = "";
+    const martes = [
+      { comida: 'Desayuno', plato: 'Avena con leche y plátano', ingredientes: 'Avena 50g, leche 150ml, plátano 80g', kcal: 350, prot: 12, grasas: 8, carbos: 50 },
+      { comida: 'Almuerzo', plato: 'Batido de proteína con almendras', ingredientes: 'Proteína 30g, almendras 20g, agua', kcal: 280, prot: 30, grasas: 15, carbos: 5 },
+      { comida: 'Comida (Body pump)', plato: 'Lentejas con verduras y pavo', ingredientes: 'Lentejas 100g, pavo 120g, verduras 100g, AOVE 5g', kcal: 600, prot: 45, grasas: 18, carbos: 55 },
+      { comida: 'Cena', plato: 'Pechuga de pavo con arroz y espinacas (igual que tú)', ingredientes: 'Pavo 150g, arroz 80g, espinacas 100g, AOVE 5g', kcal: 600, prot: 45, grasas: 18, carbos: 35 }
+    ];
 
-      const dayMeals = data[selected];
-      if (!dayMeals || dayMeals.length === 0) {
-        content.innerHTML = "<p>Menú en preparación para este día.</p>";
-        return;
-      }
+    const miercoles = [
+      { comida: 'Desayuno', plato: 'Tortilla con espinacas y tomate', ingredientes: 'Huevos 2, espinacas 50g, tomate 50g', kcal: 320, prot: 25, grasas: 20, carbos: 10 },
+      { comida: 'Almuerzo', plato: 'Queso fresco con nueces y pera', ingredientes: 'Queso fresco 125g, nueces 15g, pera 100g', kcal: 280, prot: 18, grasas: 15, carbos: 20 },
+      { comida: 'Comida (Body pump)', plato: 'Merluza con patata y judías verdes', ingredientes: 'Merluza 150g, patata 150g, judías verdes 100g, AOVE 5g', kcal: 600, prot: 45, grasas: 18, carbos: 40 },
+      { comida: 'Cena', plato: 'Salmón con patata y calabacín (igual que tú)', ingredientes: 'Salmón 150g, patata 150g, calabacín 150g, AOVE 5g', kcal: 600, prot: 40, grasas: 30, carbos: 25 }
+    ];
 
-      let totalKcal = 0, totalProt = 0, totalGrasas = 0, totalCarbos = 0;
+    const jueves = [
+      { comida: 'Desayuno', plato: 'Porridge de avena con frutos secos', ingredientes: 'Avena 50g, frutos secos 20g, leche 150ml', kcal: 400, prot: 15, grasas: 18, carbos: 45 },
+      { comida: 'Almuerzo', plato: 'Batido de proteína con plátano', ingredientes: 'Proteína 30g, plátano 100g, agua', kcal: 280, prot: 30, grasas: 2, carbos: 25 },
+      { comida: 'Comida (Pilates)', plato: 'Ensalada de garbanzos con atún y verduras', ingredientes: 'Garbanzos 100g, atún 80g, verdura 100g, AOVE 5g', kcal: 600, prot: 45, grasas: 18, carbos: 40 },
+      { comida: 'Cena', plato: 'Pechuga de pavo con arroz y espinacas (igual que tú)', ingredientes: 'Pavo 150g, arroz 80g, espinacas 100g, AOVE 5g', kcal: 600, prot: 45, grasas: 18, carbos: 35 }
+    ];
 
-      dayMeals.forEach(meal => {
-        totalKcal += meal.kcal;
-        totalProt += meal.prot;
-        totalGrasas += meal.grasas;
-        totalCarbos += meal.carbos;
+    const viernes = [
+      { comida: 'Desayuno', plato: 'Yogur natural con granola y frutos rojos', ingredientes: 'Yogur 150g, granola 40g, frutos rojos 50g', kcal: 350, prot: 15, grasas: 10, carbos: 45 },
+      { comida: 'Almuerzo', plato: 'Huevos revueltos con champiñones y pan integral', ingredientes: 'Huevos 2, champiñones 50g, pan integral 40g', kcal: 350, prot: 25, grasas: 20, carbos: 25 },
+      { comida: 'Comida (Body pump)', plato: 'Ternera con batata y brócoli', ingredientes: 'Ternera 150g, batata 150g, brócoli 100g, AOVE 5g', kcal: 650, prot: 50, grasas: 20, carbos: 40 },
+      { comida: 'Cena', plato: 'Salmón con patata y calabacín (igual que tú)', ingredientes: 'Salmón 150g, patata 150g, calabacín 150g, AOVE 5g', kcal: 600, prot: 40, grasas: 30, carbos: 25 }
+    ];
 
-        content.innerHTML += `
-          <div class="meal">
-            <h3>${meal.titulo}</h3>
-            <strong>${meal.plato}</strong><br>
-            <em>${meal.ingredientes}</em><br><br>
-            <strong>Macros:</strong><br>
-            ${meal.kcal} kcal – ${meal.prot}g proteínas – ${meal.grasas}g grasas – ${meal.carbos}g carbos
-          </div>
-        `;
-      });
-
-      content.innerHTML += `
-        <div class="totals">
-          <h3>Resumen diario</h3>
-          ${totalKcal} kcal – ${totalProt}g proteínas – ${totalGrasas}g grasas – ${totalCarbos}g carbos
-        </div>
-      `;
-    }
-
-    window.onload = showDay;
-  </script>
-</body>
-</html>
+    const sabado = [
+      { comida: 'Desayuno', plato: 'Tostadas con mantequilla de cacahuete y plátano', ingredientes: 'Pan integral 60g, mantequilla de cacahuete 20g, pl
