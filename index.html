@@ -1,61 +1,63 @@
-<!DOCTYPE html>
+<!DOCTYPE html>More actions
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Menú semanal</title>
+  <title>Menú Semanal - Feddyfit</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      background-color: #f9f9f9;
+      margin: 0; padding: 0;
+      background-color: #f5f5f5;
+      color: #333;
     }
     header {
-      background-color: #2c3e50;
+      background-color: #0066cc;
       color: white;
-      text-align: center;
       padding: 1rem;
+      text-align: center;
     }
     main {
-      max-width: 800px;
-      margin: 2rem auto;
       padding: 1rem;
+      max-width: 800px;
+      margin: auto;
     }
-    .day-selector {
+    .selector {
       text-align: center;
-      margin-bottom: 1rem;
+      margin-bottom: 1.5rem;
     }
-    select {
-      font-size: 1rem;
+    .selector select {
       padding: 0.5rem;
+      font-size: 1rem;
     }
     .meal {
       background-color: white;
       padding: 1rem;
       margin-bottom: 1rem;
       border-radius: 8px;
-      box-shadow: 0 0 8px rgba(0,0,0,0.1);
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
-    .summary, .supplement {
-      background-color: #eaf2f8;
+    .meal h3 {
+      margin-top: 0;
+    }
+    .totals {
+      background-color: #e0f7fa;
       padding: 1rem;
       border-radius: 8px;
       text-align: center;
-      font-weight: bold;
-      margin-top: 1rem;
     }
   </style>
 </head>
 <body>
   <header>
-    <h1>Menú semanal</h1>
-    <p>Objetivo: recomposición corporal (2700 kcal/día)</p>
+    <h1>Menú semanal - Pareja</h1>
+    <h1>Menú Semanal - Feddyfit</h1>
+    <p>Objetivo: perder grasa y ganar músculo (1700 kcal/día)</p>
   </header>
   <main>
-    <div class="day-selector">
-      <label for="day">Selecciona un día: </label>
-      <select id="day" onchange="renderMenu()">
+    <div class="selector">
+      <label for="daySelect">Selecciona un día:</label>
+      <select id="daySelect" onchange="showDay()">
         <option value="lunes">Lunes</option>
         <option value="martes">Martes</option>
         <option value="miercoles">Miércoles</option>
@@ -65,121 +67,239 @@
         <option value="domingo">Domingo</option>
       </select>
     </div>
-    <div id="menu"></div>
+    <div id="menuContent"></div>
   </main>
+
   <script>
-    const lunes = [
-      { comida: 'Pre-entreno', plato: 'Avena con leche y plátano', ingredientes: 'Avena 40g, leche 150ml, plátano 80g', kcal: 320, prot: 12, grasas: 8, carbos: 45 },
-      { comida: 'Post-entreno', plato: 'Batido whey y nueces', ingredientes: 'Whey 30g, nueces 15g, agua', kcal: 230, prot: 27, grasas: 10, carbos: 5 },
-      { comida: 'Comida', plato: 'Pollo con arroz y verduras', ingredientes: 'Pollo 150g, arroz 100g en seco, verduras 100g, AOVE 5g', kcal: 650, prot: 45, grasas: 18, carbos: 50 },
-      { comida: 'Merienda', plato: 'Yogur natural y manzana', ingredientes: 'Yogur 125g, manzana 150g', kcal: 200, prot: 6, grasas: 4, carbos: 30 },
-      { comida: 'Cena', plato: 'Salmón con patata y calabacín', ingredientes: 'Salmón 150g, patata 150g, calabacín 150g, AOVE 5g', kcal: 600, prot: 40, grasas: 30, carbos: 25 },
-    ];
-
-    const martes = [
-      { comida: 'Pre-entreno', plato: 'Tostadas con aguacate y huevo', ingredientes: 'Pan integral 60g, aguacate 50g, huevo 60g', kcal: 330, prot: 15, grasas: 16, carbos: 30 },
-      { comida: 'Post-entreno', plato: 'Batido whey y plátano', ingredientes: 'Whey 30g, plátano 100g, agua', kcal: 250, prot: 27, grasas: 2, carbos: 20 },
-      { comida: 'Comida', plato: 'Garbanzos con atún y ensalada', ingredientes: 'Garbanzos 80g en seco, atún 80g, verdura 100g, AOVE 5g', kcal: 500, prot: 35, grasas: 16, carbos: 30 },
-      { comida: 'Merienda', plato: 'Frutos secos y yogur', ingredientes: 'Almendras 20g, yogur 125g', kcal: 220, prot: 8, grasas: 15, carbos: 10 },
-      { comida: 'Cena', plato: 'Pechuga de pavo con arroz y espinacas', ingredientes: 'Pavo 150g, arroz 80g en seco, espinacas 100g, AOVE 5g', kcal: 600, prot: 45, grasas: 18, carbos: 35 },
-    ];
-
-    const miercoles = [
-      { comida: 'Pre-entreno', plato: 'Avena con yogur griego y arándanos', ingredientes: 'Avena 40g, yogur griego 150g, arándanos 80g', kcal: 350, prot: 20, grasas: 5, carbos: 50 },
-      { comida: 'Post-entreno', plato: 'Batido whey con plátano', ingredientes: 'Whey 30g, plátano 100g, agua', kcal: 250, prot: 27, grasas: 2, carbos: 20 },
-      { comida: 'Comida', plato: 'Lentejas con sepia y verduras', ingredientes: 'Lentejas 80g en seco, sepia 120g, verduras 100g, AOVE 5g', kcal: 600, prot: 42, grasas: 12, carbos: 50 },
-      { comida: 'Merienda', plato: 'Manzana y puñado de frutos secos', ingredientes: 'Manzana 150g, nueces 20g', kcal: 250, prot: 5, grasas: 15, carbos: 30 },
-      { comida: 'Cena', plato: 'Bacalao con patata y guisantes', ingredientes: 'Bacalao 150g, patata 150g, guisantes 100g, AOVE 5g', kcal: 620, prot: 42, grasas: 25, carbos: 30 },
-    ];
-
-    const jueves = [
-      { comida: 'Pre-entreno', plato: 'Tostadas integrales con aguacate y huevo', ingredientes: 'Pan integral 60g, aguacate 50g, huevo 60g', kcal: 330, prot: 15, grasas: 16, carbos: 30 },
-      { comida: 'Post-entreno', plato: 'Batido whey con chocolate puro', ingredientes: 'Whey 30g, cacao puro 10g, agua', kcal: 260, prot: 27, grasas: 3, carbos: 15 },
-      { comida: 'Comida', plato: 'Arroz con pollo y verduras', ingredientes: 'Arroz 100g en seco, pollo 150g, verduras 100g, AOVE 5g', kcal: 650, prot: 45, grasas: 18, carbos: 50 },
-      { comida: 'Merienda', plato: 'Yogur natural con piña', ingredientes: 'Yogur 125g, piña 150g', kcal: 210, prot: 7, grasas: 3, carbos: 30 },
-      { comida: 'Cena', plato: 'Pavo con pasta integral y espinacas', ingredientes: 'Pavo 150g, pasta 80g en seco, espinacas 100g, AOVE 5g', kcal: 610, prot: 44, grasas: 17, carbos: 35 },
-    ];
-
-    const viernes = [
-      { comida: 'Pre-entreno', plato: 'Avena con leche y plátano', ingredientes: 'Avena 40g, leche 150ml, plátano 80g', kcal: 320, prot: 12, grasas: 8, carbos: 45 },
-      { comida: 'Post-entreno', plato: 'Batido whey y nueces', ingredientes: 'Whey 30g, nueces 15g, agua', kcal: 230, prot: 27, grasas: 10, carbos: 5 },
-      { comida: 'Comida', plato: 'Judías con atún y verduras', ingredientes: 'Judías 80g en seco, atún 80g, verduras 100g, AOVE 5g', kcal: 550, prot: 40, grasas: 16, carbos: 35 },
-      { comida: 'Merienda', plato: 'Yogur griego y manzana', ingredientes: 'Yogur griego 125g, manzana 150g', kcal: 210, prot: 15, grasas: 6, carbos: 30 },
-      { comida: 'Cena', plato: 'Salmón con patata y calabacín', ingredientes: 'Salmón 150g, patata 150g, calabacín 150g, AOVE 5g', kcal: 600, prot: 40, grasas: 30, carbos: 25 },
-    ];
-
-    const sabado = [
-      { comida: 'Pre-entreno', plato: 'Tostadas con aguacate y huevo', ingredientes: 'Pan integral 60g, aguacate 50g, huevo 60g', kcal: 330, prot: 15, grasas: 16, carbos: 30 },
-      { comida: 'Post-entreno', plato: 'Batido whey con plátano', ingredientes: 'Whey 30g, plátano 100g, agua', kcal: 250, prot: 27, grasas: 2, carbos: 20 },
-      { comida: 'Comida', plato: 'Garbanzos con pavo y verduras', ingredientes: 'Garbanzos 80g en seco, pavo 150g, verduras 100g, AOVE 5g', kcal: 600, prot: 43, grasas: 15, carbos: 45 },
-      { comida: 'Merienda', plato: 'Manzana y puñado de frutos secos', ingredientes: 'Manzana 150g, almendras 20g', kcal: 250, prot: 5, grasas: 15, carbos: 30 },
-      { comida: 'Cena', plato: 'Bacalao con arroz y espárragos', ingredientes: 'Bacalao 150g, arroz 80g en seco, espárragos 100g, AOVE 5g', kcal: 610, prot: 42, grasas: 25, carbos: 30 },
-    ];
-
-    const domingo = [
-      { comida: 'Pre-entreno', plato: 'Avena con yogur griego y arándanos', ingredientes: 'Avena 40g, yogur griego 150g, arándanos 80g', kcal: 350, prot: 20, grasas: 5, carbos: 50 },
-      { comida: 'Post-entreno', plato: 'Batido whey con chocolate puro', ingredientes: 'Whey 30g, cacao puro 10g, agua', kcal: 260, prot: 27, grasas: 3, carbos: 15 },
-      { comida: 'Comida', plato: 'Lentejas con sepia y verduras', ingredientes: 'Lentejas 80g en seco, sepia 120g, verduras 100g, AOVE 5g', kcal: 600, prot: 42, grasas: 12, carbos: 50 },
-      { comida: 'Merienda', plato: 'Yogur con piña y frutos secos', ingredientes: 'Yogur 125g, piña 100g, nueces 15g', kcal: 260, prot: 8, grasas: 15, carbos: 25 },
-      { comida: 'Cena', plato: 'Pavo con pasta integral y brócoli', ingredientes: 'Pavo 150g, pasta 80g en seco, brócoli 100g, AOVE 5g', kcal: 610, prot: 44, grasas: 17, carbos: 35 },
-    ];
-
-    const suplementacion = `
-      <div class="supplement">
-        <p><strong>Suplementación diaria:</strong> Creatina 5g, Aminoácidos BCAA, Proteína whey en batidos post-entreno.</p>
-      </div>
-    `;
-
-    const menus = {
-      lunes,
-      martes,
-      miercoles,
-      jueves,
-      viernes,
-      sabado,
-      domingo,
+    const data = {
+      lunes: [
+        {
+          titulo: "Desayuno",
+          plato: "Tostadas con aguacate y huevo",
+          ingredientes: "Pan integral 40g, aguacate 30g, huevo 1 (60g)",
+          kcal: 330, prot: 15, grasas: 16, carbos: 30
+        },
+        {
+          titulo: "Comida",
+          plato: "Lentejas con arroz y verduras",
+          ingredientes: "Lentejas 50g, arroz 30g, verduras 100g, AOVE 5g",
+          kcal: 520, prot: 25, grasas: 14, carbos: 60
+        },
+        {
+          titulo: "Merienda",
+          plato: "Yogur con nueces y fruta",
+          ingredientes: "Yogur 125g, nueces 15g, fruta 100g",
+          kcal: 280, prot: 10, grasas: 15, carbos: 25
+        },
+        {
+          titulo: "Cena",
+          plato: "Salmón con calabacín y patata",
+          ingredientes: "Salmón 120g, calabacín 150g, patata 120g, AOVE 5g",
+          kcal: 570, prot: 40, grasas: 30, carbos: 35
+        }
+      ],
+      martes: [
+        {
+          titulo: "Desayuno",
+          plato: "Batido de avena, plátano y proteína whey",
+          ingredientes: "Avena 30g, plátano 80g, proteína whey 25g, leche 150ml",
+          kcal: 350, prot: 28, grasas: 5, carbos: 40
+        },
+        {
+          titulo: "Comida",
+          plato: "Pechuga de pavo con quinoa y espinacas",
+          ingredientes: "Pechuga de pavo 100g, quinoa 40g, espinacas 100g, AOVE 5g",
+          kcal: 520, prot: 40, grasas: 15, carbos: 40
+        },
+        {
+          titulo: "Merienda",
+          plato: "Yogur griego con almendras y miel",
+          ingredientes: "Yogur griego 125g, almendras 15g, miel 10g",
+          kcal: 270, prot: 12, grasas: 14, carbos: 18
+        },
+        {
+          titulo: "Cena",
+          plato: "Merluza al horno con brócoli y boniato",
+          ingredientes: "Merluza 130g, brócoli 150g, boniato 120g, AOVE 5g",
+          kcal: 540, prot: 38, grasas: 18, carbos: 30
+        }
+      ],
+      miercoles: [
+        {
+          titulo: "Desayuno",
+          plato: "Tostadas integrales con mantequilla de cacahuete y plátano",
+          ingredientes: "Pan integral 40g, mantequilla de cacahuete 15g, plátano 70g",
+          kcal: 350, prot: 13, grasas: 17, carbos: 35
+        },
+        {
+          titulo: "Comida",
+          plato: "Garbanzos con pavo y verduras salteadas",
+          ingredientes: "Garbanzos 60g, pavo 100g, pimientos y cebolla 100g, AOVE 5g",
+          kcal: 520, prot: 40, grasas: 14, carbos: 45
+        },
+        {
+          titulo: "Merienda",
+          plato: "Queso fresco con nueces y fruta",
+          ingredientes: "Queso fresco 100g, nueces 15g, fruta 100g",
+          kcal: 280, prot: 18, grasas: 18, carbos: 20
+        },
+        {
+          titulo: "Cena",
+          plato: "Salmón a la plancha con calabacín y arroz integral",
+          ingredientes: "Salmón 120g, calabacín 150g, arroz integral 40g, AOVE 5g",
+          kcal: 550, prot: 40, grasas: 30, carbos: 30
+        }
+      ],
+      jueves: [
+        {
+          titulo: "Desayuno",
+          plato: "Porridge de avena con frutos secos y canela",
+          ingredientes: "Avena 35g, leche 150ml, nueces 15g, canela al gusto",
+          kcal: 360, prot: 15, grasas: 16, carbos: 40
+        },
+        {
+          titulo: "Comida",
+          plato: "Ensalada de lentejas con atún y verduras frescas",
+          ingredientes: "Lentejas 50g, atún en agua 80g, tomate, pepino y lechuga 100g, AOVE 5g",
+          kcal: 510, prot: 38, grasas: 15, carbos: 40
+        },
+        {
+          titulo: "Merienda",
+          plato: "Batido whey con frutos rojos",
+          ingredientes: "Proteína whey 25g, frutos rojos 80g, agua",
+          kcal: 240, prot: 27, grasas: 2, carbos: 15
+        },
+        {
+          titulo: "Cena",
+          plato: "Pechuga de pavo con espárragos y patata al horno",
+          ingredientes: "Pavo 110g, espárragos 150g, patata 120g, AOVE 5g",
+          kcal: 560, prot: 42, grasas: 18, carbos: 30
+        }
+      ],
+      viernes: [
+        {
+          titulo: "Desayuno",
+          plato: "Tortilla de claras con espinacas y tomate",
+          ingredientes: "Claras 150g, espinacas 50g, tomate 50g, pan integral 30g",
+          kcal: 320, prot: 30, grasas: 5, carbos: 30
+        },
+        {
+          titulo: "Comida",
+          plato: "Judías verdes con pavo y arroz integral",
+          ingredientes: "Judías verdes 150g, pavo 100g, arroz integral 40g, AOVE 5g",
+          kcal: 520, prot: 40, grasas: 15, carbos: 40
+        },
+        {
+          titulo: "Merienda",
+          plato: "Yogur natural con semillas de chía y fruta",
+          ingredientes: "Yogur 125g, semillas de chía 10g, fruta 100g",
+          kcal: 280, prot: 12, grasas: 10, carbos: 25
+        },
+        {
+          titulo: "Cena",
+          plato: "Merluza con calabacín y quinoa",
+          ingredientes: "Merluza 130g, calabacín 150g, quinoa 40g, AOVE 5g",
+          kcal: 580, prot: 42, grasas: 18, carbos: 30
+        }
+      ],
+      sabado: [
+        {
+          titulo: "Desayuno",
+          plato: "Smoothie bowl de yogur con avena y frutas",
+          ingredientes: "Yogur 150g, avena 20g, plátano 70g, frutos rojos 50g",
+          kcal: 350, prot: 15, grasas: 6, carbos: 50
+        },
+        {
+          titulo: "Comida",
+          plato: "Ensalada de quinoa con pollo y verduras",
+          ingredientes: "Quinoa 40g, pollo 100g, pimiento, tomate y cebolla 100g, AOVE 5g",
+          kcal: 520, prot: 42, grasas: 14, carbos: 40
+        },
+        {
+          titulo: "Merienda",
+          plato: "Batido whey con plátano",
+          ingredientes: "Whey 25g, plátano 80g, leche 150ml",
+          kcal: 300, prot: 30, grasas: 4, carbos: 35
+        },
+        {
+          titulo: "Cena",
+          plato: "Salmón al horno con brócoli y patata",
+          ingredientes: "Salmón 120g, brócoli 150g, patata 120g, AOVE 5g",
+          kcal: 530, prot: 40, grasas: 28, carbos: 30
+        }
+      ],
+      domingo: [
+        {
+          titulo: "Desayuno",
+          plato: "Tostadas integrales con queso fresco y mermelada sin azúcar",
+          ingredientes: "Pan integral 40g, queso fresco 50g, mermelada 15g",
+          kcal: 320, prot: 18, grasas: 8, carbos: 40
+        },
+        {
+          titulo: "Comida",
+          plato: "Estofado de ternera con verduras y arroz integral",
+          ingredientes: "Ternera magra 100g, verduras 120g, arroz integral 40g, AOVE 5g",
+          kcal: 540, prot: 42, grasas: 15, carbos: 40
+        },
+        {
+          titulo: "Merienda",
+          plato: "Yogur griego con nueces y miel",
+          ingredientes: "Yogur griego 125g, nueces 15g, miel 10g",
+          kcal: 280, prot: 12, grasas: 14, carbos: 18
+        },
+        {
+          titulo: "Cena",
+          plato: "Pechuga de pollo con calabacín y patata al horno",
+          ingredientes: "Pollo 110g, calabacín 150g, patata 120g, AOVE 5g",
+          kcal: 560, prot: 45, grasas: 18, carbos: 30
+        }
+      ]
     };
 
-    function renderMenu() {
-      const day = document.getElementById('day').value;
-      const menuDiv = document.getElementById('menu');
-      const menu = menus[day];
+    function showDay() {
+      const selected = document.getElementById("daySelect").value;
+      const content = document.getElementById("menuContent");
+      content.innerHTML = "";
 
-      let html = '';
-      let totalKcal = 0;
-      let totalProt = 0;
-      let totalGrasas = 0;
-      let totalCarbos = 0;
+      const dayMeals = data[selected];
+      if (!dayMeals || dayMeals.length === 0) {
+        content.innerHTML = "<p>No hay datos para este día.</p>";
+        return;
+      }
 
-      menu.forEach(meal => {
+      let totalKcal = 0, totalProt = 0, totalGrasas = 0, totalCarbos = 0;
+
+      dayMeals.forEach(meal => {
+        const mealDiv = document.createElement("div");
+        mealDiv.className = "meal";
+        mealDiv.innerHTML = `
+          <h3>${meal.titulo}</h3>
+          <p><strong>Plato:</strong> ${meal.plato}</p>
+          <p><strong>Ingredientes:</strong> ${meal.ingredientes}</p>
+          <p><strong>Valores nutricionales:</strong> ${meal.kcal} kcal, ${meal.prot} g proteínas, ${meal.grasas} g grasas, ${meal.carbos} g carbohidratos</p>
+        `;
+        content.appendChild(mealDiv);
+
         totalKcal += meal.kcal;
         totalProt += meal.prot;
         totalGrasas += meal.grasas;
         totalCarbos += meal.carbos;
-
-        html += `
-          <div class="meal">
-            <h3>${meal.comida}</h3>
-            <p><strong>Plato:</strong> ${meal.plato}</p>
-            <p><strong>Ingredientes:</strong> ${meal.ingredientes}</p>
-            <p>Kcal: ${meal.kcal} | Proteínas: ${meal.prot}g | Grasas: ${meal.grasas}g | Carbohidratos: ${meal.carbos}g</p>
-          </div>
-        `;
       });
 
-      html += `
-        <div class="summary">
-          Total aproximado: ${totalKcal} kcal | Proteínas: ${totalProt.toFixed(1)}g | Grasas: ${totalGrasas.toFixed(1)}g | Carbohidratos: ${totalCarbos.toFixed(1)}g
-        </div>
+      const totalsDiv = document.createElement("div");
+      totalsDiv.className = "totals";
+      totalsDiv.innerHTML = `
+        <h3>Total día</h3>
+        <p><strong>Calorías:</strong> ${totalKcal} kcal</p>
+        <p><strong>Proteínas:</strong> ${totalProt} g</p>
+        <p><strong>Grasas:</strong> ${totalGrasas} g</p>
+        <p><strong>Carbohidratos:</strong> ${totalCarbos} g</p>
       `;
-
-      html += suplementacion;
-
-      menuDiv.innerHTML = html;
+      content.appendChild(totalsDiv);
     }
 
-    // Render inicial (lunes)
-    renderMenu();
+    // Mostrar lunes por defecto
+    window.onload = showDay;More actions
   </script>
 </body>
 </html>
