@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Menú Semanal - Pareja</title>
+  <title>Menú Semanal - Feddyfit</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -262,37 +262,42 @@
 
       const dayMeals = data[selected];
       if (!dayMeals || dayMeals.length === 0) {
-        content.innerHTML = "<p>Menú en preparación para este día.</p>";
+        content.innerHTML = "<p>No hay datos para este día.</p>";
         return;
       }
 
       let totalKcal = 0, totalProt = 0, totalGrasas = 0, totalCarbos = 0;
 
       dayMeals.forEach(meal => {
+        const mealDiv = document.createElement("div");
+        mealDiv.className = "meal";
+        mealDiv.innerHTML = `
+          <h3>${meal.titulo}</h3>
+          <p><strong>Plato:</strong> ${meal.plato}</p>
+          <p><strong>Ingredientes:</strong> ${meal.ingredientes}</p>
+          <p><strong>Valores nutricionales:</strong> ${meal.kcal} kcal, ${meal.prot} g proteínas, ${meal.grasas} g grasas, ${meal.carbos} g carbohidratos</p>
+        `;
+        content.appendChild(mealDiv);
+
         totalKcal += meal.kcal;
         totalProt += meal.prot;
         totalGrasas += meal.grasas;
         totalCarbos += meal.carbos;
-
-        content.innerHTML += `
-          <div class="meal">
-            <h3>${meal.titulo}</h3>
-            <strong>${meal.plato}</strong><br>
-            <em>${meal.ingredientes}</em><br><br>
-            <strong>Macros:</strong><br>
-            ${meal.kcal} kcal – ${meal.prot}g proteínas – ${meal.grasas}g grasas – ${meal.carbos}g carbos
-          </div>
-        `;
       });
 
-      content.innerHTML += `
-        <div class="totals">
-          <h3>Resumen diario</h3>
-          ${totalKcal} kcal – ${totalProt}g proteínas – ${totalGrasas}g grasas – ${totalCarbos}g carbos
-        </div>
+      const totalsDiv = document.createElement("div");
+      totalsDiv.className = "totals";
+      totalsDiv.innerHTML = `
+        <h3>Total día</h3>
+        <p><strong>Calorías:</strong> ${totalKcal} kcal</p>
+        <p><strong>Proteínas:</strong> ${totalProt} g</p>
+        <p><strong>Grasas:</strong> ${totalGrasas} g</p>
+        <p><strong>Carbohidratos:</strong> ${totalCarbos} g</p>
       `;
+      content.appendChild(totalsDiv);
     }
 
+    // Mostrar lunes por defecto
     window.onload = showDay;
   </script>
 </body>
