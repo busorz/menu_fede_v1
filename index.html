@@ -80,6 +80,19 @@
       color: #eee;
       border: 1px solid #555;
     }
+    /* Estilos resumen */
+    .daily-summary {
+      background-color: #e0e0e0;
+      padding: 1rem;
+      border-radius: 8px;
+      font-weight: bold;
+      margin-top: 1rem;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    body.dark .daily-summary {
+      background-color: #292929;
+      box-shadow: 0 2px 5px rgba(255,255,255,0.1);
+    }
   </style>
 </head>
 <body>
@@ -103,6 +116,7 @@
       </select>
     </div>
     <div id="menuContent"></div>
+    <div id="dailySummary" class="daily-summary"></div> <!-- Aquí va el resumen diario -->
   </main>
 
   <script>
@@ -138,76 +152,67 @@
         { titulo: "Cena", plato: "Merluza con calabacín y quinoa", ingredientes: "Merluza 100g, calabacín 150g, quinoa 40g, AOVE 5g", kcal: 480, prot: 34, grasas: 16, carbos: 28 }
       ],
       sabado: [
-        { titulo: "Desayuno", plato: "Smoothie bowl de yogur con avena y frutas", ingredientes: "Yogur natural 150g, avena 20g, plátano 70g, frutos rojos 50g", kcal: 350, prot: 15, grasas: 10, carbos: 40 },
-        { titulo: "Comida", plato: "Arroz integral con pollo y verduras salteadas", ingredientes: "Arroz integral 50g, pollo 100g, verduras 100g, AOVE 5g", kcal: 520, prot: 40, grasas: 15, carbos: 45 },
+        { titulo: "Desayuno", plato: "Smoothie de frutas con proteína whey", ingredientes: "Plátano 80g, frutos rojos 50g, proteína whey 30g, leche 150ml", kcal: 350, prot: 35, grasas: 5, carbos: 40 },
+        { titulo: "Comida", plato: "Pollo al curry con arroz basmati y verduras", ingredientes: "Pollo 100g, arroz basmati 50g, verduras 100g, AOVE 5g, especias", kcal: 520, prot: 40, grasas: 15, carbos: 40 },
         { titulo: "Merienda", plato: "Queso fresco con nueces y fruta", ingredientes: "Queso fresco 100g, nueces 15g, fruta 100g", kcal: 280, prot: 18, grasas: 18, carbos: 20 },
-        { titulo: "Cena", plato: "Pescado blanco con espinacas y puré de patata", ingredientes: "Pescado blanco 100g, espinacas 150g, patata 120g, AOVE 5g", kcal: 460, prot: 33, grasas: 16, carbos: 26 }
+        { titulo: "Cena", plato: "Salmón a la plancha con patata y brócoli", ingredientes: "Salmón 100g, patata 120g, brócoli 150g, AOVE 5g", kcal: 480, prot: 34, grasas: 25, carbos: 28 }
       ],
       domingo: [
-        { titulo: "Desayuno", plato: "Tostadas integrales con aguacate y huevo", ingredientes: "Pan integral 40g, aguacate 30g, huevo 1 (60g)", kcal: 330, prot: 15, grasas: 16, carbos: 30 },
-        { titulo: "Comida", plato: "Lentejas con arroz y verduras", ingredientes: "Lentejas 50g, arroz 30g, verduras 100g, AOVE 5g", kcal: 520, prot: 25, grasas: 14, carbos: 60 },
-        { titulo: "Merienda", plato: "Yogur natural con nueces y fruta", ingredientes: "Yogur natural 150g, nueces 15g, fruta 100g", kcal: 300, prot: 15, grasas: 17, carbos: 25 },
-        { titulo: "Cena", plato: "Salmón con calabacín y patata", ingredientes: "Salmón 100g, calabacín 150g, patata 120g, AOVE 5g", kcal: 480, prot: 34, grasas: 25, carbos: 28 }
-      ]
+        { titulo: "Desayuno", plato: "Tostadas integrales con aguacate y tomate", ingredientes: "Pan integral 40g, aguacate 30g, tomate 50g", kcal: 320, prot: 10, grasas: 16, carbos: 30 },
+        { titulo: "Comida", plato: "Paella de marisco con verduras", ingredientes: "Arroz 50g, marisco 100g, verduras 100g, AOVE 5g", kcal: 520, prot: 40, grasas: 15, carbos: 45 },
+        { titulo: "Merienda", plato: "Yogur natural con almendras y miel", ingredientes: "Yogur natural 150g, almendras 15g, miel 10g", kcal: 280, prot: 12, grasas: 14, carbos: 18 },
+        { titulo: "Cena", plato: "Pescado blanco con espinacas y quinoa", ingredientes: "Pescado blanco 100g, espinacas 150g, quinoa 40g, AOVE 5g", kcal: 480, prot: 34, grasas: 16, carbos: 28 }
+      ],
     };
 
     function showDay() {
-      const daySelect = document.getElementById('daySelect');
-      const day = daySelect.value;
-      localStorage.setItem('selectedDay', day); // Guardar selección de día
-      const menuContent = document.getElementById('menuContent');
-      const dayMenu = data[day];
+      const day = document.getElementById("daySelect").value;
+      const meals = data[day];
+      const menuDiv = document.getElementById("menuContent");
+      const summaryDiv = document.getElementById("dailySummary");
 
-      if (!dayMenu) {
-        menuContent.innerHTML = "<p>No hay datos para este día.</p>";
+      if (!meals) {
+        menuDiv.innerHTML = "<p>Día no disponible.</p>";
+        summaryDiv.innerHTML = "";
         return;
       }
 
-      let html = '';
-      dayMenu.forEach(meal => {
+      // Mostrar cada comida
+      let html = "";
+      let totalKcal = 0, totalProt = 0, totalGrasas = 0, totalCarbos = 0;
+      for (const meal of meals) {
         html += `
           <div class="meal">
             <h3>${meal.titulo}</h3>
             <p><strong>Plato:</strong> ${meal.plato}</p>
             <p><strong>Ingredientes:</strong> ${meal.ingredientes}</p>
-            <p><strong>Calorías:</strong> ${meal.kcal} kcal | <strong>Proteínas:</strong> ${meal.prot} g | <strong>Grasas:</strong> ${meal.grasas} g | <strong>Carbohidratos:</strong> ${meal.carbos} g</p>
+            <p><strong>Valor energético:</strong> ${meal.kcal} kcal, <strong>Proteínas:</strong> ${meal.prot} g, <strong>Grasas:</strong> ${meal.grasas} g, <strong>Carbohidratos:</strong> ${meal.carbos} g</p>
           </div>
         `;
-      });
-      menuContent.innerHTML = html;
+        totalKcal += meal.kcal;
+        totalProt += meal.prot;
+        totalGrasas += meal.grasas;
+        totalCarbos += meal.carbos;
+      }
+      menuDiv.innerHTML = html;
+
+      // Mostrar resumen diario
+      summaryDiv.innerHTML = `
+        <p>Resumen nutricional diario:</p>
+        <p>Calorías totales: <strong>${totalKcal} kcal</strong></p>
+        <p>Proteínas totales: <strong>${totalProt} g</strong></p>
+        <p>Grasas totales: <strong>${totalGrasas} g</strong></p>
+        <p>Carbohidratos totales: <strong>${totalCarbos} g</strong></p>
+      `;
     }
 
+    // Mostrar el lunes por defecto
+    showDay();
+
+    // Función para modo oscuro / claro
     function toggleDarkMode() {
-      document.body.classList.toggle('dark');
-      const btn = document.querySelector('.dark-mode-toggle');
-      if (document.body.classList.contains('dark')) {
-        btn.textContent = 'Modo claro';
-        localStorage.setItem('darkMode', 'true');
-      } else {
-        btn.textContent = 'Modo oscuro';
-        localStorage.setItem('darkMode', 'false');
-      }
+      document.body.classList.toggle("dark");
     }
-
-    window.onload = () => {
-      // Cargar preferencia modo oscuro
-      const darkModePref = localStorage.getItem('darkMode');
-      if (darkModePref === null || darkModePref === 'true') {
-        document.body.classList.add('dark');
-        document.querySelector('.dark-mode-toggle').textContent = 'Modo claro';
-      } else {
-        document.body.classList.remove('dark');
-        document.querySelector('.dark-mode-toggle').textContent = 'Modo oscuro';
-      }
-
-      // Cargar día seleccionado
-      const savedDay = localStorage.getItem('selectedDay');
-      if (savedDay && document.getElementById('daySelect').querySelector(`option[value="${savedDay}"]`)) {
-        document.getElementById('daySelect').value = savedDay;
-      }
-
-      showDay();
-    };
   </script>
 </body>
 </html>
